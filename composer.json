@@ -1,0 +1,35 @@
+{
+    "name": "korridor/laravel-computed-attributes",
+    "description": "Laravel package that adds computed attributes to eloquent models.",
+    "keywords": ["laravel", "model", "eloquent", "computed", "attribute", "caching", "performance"],
+    "homepage": "https://github.com/korridor/laravel-computed-attributes",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "korridor",
+            "email": "26689068+korridor@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.1|^7.2|^7.3",
+        "illuminate/support": "^5.6|^5.7|^5.8|^6",
+        "illuminate/database": "^5.6|^5.7|^5.8|^6",
+        "illuminate/console": "^5.6|^5.7|^5.8|^6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Korridor\\LaravelComputedAttributes\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Korridor\\LaravelComputedAttributes\\LaravelComputedAttributesServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
