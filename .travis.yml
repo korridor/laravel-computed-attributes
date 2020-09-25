@@ -8,62 +8,62 @@ matrix:
     include:
         # Laravel 5.6.*
         -   php: 7.1
-            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.2
-            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.3
-            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         # Laravel 5.7.*
         -   php: 7.1
-            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.2
-            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.3
-            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         # Laravel 5.8.*
         -   php: 7.1
-            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.1
-            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.2
-            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.2
-            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.3
-            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.3
-            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         # Laravel 6.*
         -   php: 7.2
-            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.2
-            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.3
-            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.3
-            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='6.*' TESTBENCH='4.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
         # Laravel 7.*
         -   php: 7.2
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.2
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.3
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.3
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.4
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.4
-            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
         # Laravel 8.*
         -   php: 7.3
-            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.3
-            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.4
-            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-lowest'
+            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.4
-            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable'
+            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
     fast_finish: true
 
 before_install:
@@ -77,7 +77,7 @@ before_script:
     - composer config discard-changes true
 
 script:
-    - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+    - vendor/bin/phpunit -c ${PHP_UNIT_CONFIG} --coverage-text --coverage-clover=coverage.xml
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
