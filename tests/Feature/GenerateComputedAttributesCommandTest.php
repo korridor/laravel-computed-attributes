@@ -1,16 +1,12 @@
 <?php
 
-
 namespace Korridor\LaravelComputedAttributes\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use Korridor\LaravelComputedAttributes\Parser\ModelAttributeParser;
 use Korridor\LaravelComputedAttributes\Tests\TestCase;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Vote;
-use Mockery;
-use Mockery\Mock;
 
 class GenerateComputedAttributesCommandTest extends TestCase
 {
@@ -37,7 +33,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
 
         // Act
         $this->artisan('computed-attributes:generate --chunkSize=100')
-            ->expectsOutput('Start calculating for following attributes of model ' .
+            ->expectsOutput('Start calculating for following attributes of model '.
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation,sum_of_votes]')
             ->assertExitCode(0)
@@ -72,7 +68,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
 
         // Act
         $this->artisan('computed-attributes:generate "Post:sum_of_votes" --chunkSize=100')
-            ->expectsOutput('Start calculating for following attributes of model ' .
+            ->expectsOutput('Start calculating for following attributes of model '.
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[sum_of_votes]')
             ->assertExitCode(0)

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Korridor\LaravelComputedAttributes\Parser;
 
 class ModelAttributesEntry
