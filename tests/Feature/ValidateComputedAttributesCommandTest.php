@@ -8,7 +8,7 @@ use Korridor\LaravelComputedAttributes\Tests\TestCase;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Vote;
 
-class GenerateComputedAttributesCommandTest extends TestCase
+class ValidateComputedAttributesCommandTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -35,20 +35,26 @@ class GenerateComputedAttributesCommandTest extends TestCase
         ]);
 
         // Act
-        $this->artisan('computed-attributes:generate', [
+        $this->artisan('computed-attributes:validate', [
                 'modelsAttributes' => null,
             ])
-            ->expectsOutput('Start calculating for following attributes of model '.
+            ->expectsOutput('Start validating following attributes of model '.
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation,sum_of_votes]')
+            ->expectsOutput('Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post[id=1][complex_calculation]')
+            ->expectsOutput('Current value: null')
+            ->expectsOutput('Calculated value: integer(3)')
+            ->expectsOutput('Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post[id=1][sum_of_votes]')
+            ->expectsOutput('Current value: integer(0)')
+            ->expectsOutput('Calculated value: integer(4)')
             ->assertExitCode(0)
             ->execute();
 
         // Assert
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
-            'complex_calculation' => 3,
-            'sum_of_votes' => 4,
+            'complex_calculation' => null,
+            'sum_of_votes' => 0,
         ]);
     }
 
@@ -75,12 +81,15 @@ class GenerateComputedAttributesCommandTest extends TestCase
         ]);
 
         // Act
-        $this->artisan('computed-attributes:generate', [
+        $this->artisan('computed-attributes:validate', [
                 'modelsAttributes' => 'Post:sum_of_votes',
             ])
-            ->expectsOutput('Start calculating for following attributes of model '.
+            ->expectsOutput('Start validating following attributes of model '.
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[sum_of_votes]')
+            ->expectsOutput('Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post[id=1][sum_of_votes]')
+            ->expectsOutput('Current value: integer(0)')
+            ->expectsOutput('Calculated value: integer(4)')
             ->assertExitCode(0)
             ->execute();
 
@@ -88,13 +97,13 @@ class GenerateComputedAttributesCommandTest extends TestCase
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'complex_calculation' => null,
-            'sum_of_votes' => 4,
+            'sum_of_votes' => 0,
         ]);
     }
 
     public function testNonNumericChunkSizeIsReturnsErrorMessage()
     {
-        $this->artisan('computed-attributes:generate', [
+        $this->artisan('computed-attributes:validate', [
                 '--chunkSize' => 'text'
             ])
             ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
@@ -104,7 +113,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
 
     public function testNegativeChunkSizeReturnsErrorMessage()
     {
-        $this->artisan('computed-attributes:generate', [
+        $this->artisan('computed-attributes:validate', [
                 '--chunkSize' => '-10'
             ])
             ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
@@ -114,7 +123,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
 
     public function testZeroAsChunkSizeReturnsErrorMessage()
     {
-        $this->artisan('computed-attributes:generate', [
+        $this->artisan('computed-attributes:validate', [
                 '--chunkSize' => '0'
             ])
             ->expectsOutput('Option chunkSize needs to be greater than zero')

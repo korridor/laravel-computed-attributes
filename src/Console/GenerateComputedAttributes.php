@@ -21,23 +21,17 @@ class GenerateComputedAttributes extends Command
      * @var string
      */
     protected $signature = 'computed-attributes:generate '.
-    '{modelsAttributes? : List of models and optionally their attributes (example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} '.
-    '{--chunkSize= : Size of the model chunk}';
+        '{modelsAttributes? : List of models and optionally their attributes, '.
+        'if not given all models that use the ComputedAttributes trait '.
+        '(example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} '.
+        '{--chunkSize=500 : Size of the model chunk}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '';
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = '(Re-)generates and saves the given computed attributes.';
 
     /**
      * Execute the console command.
@@ -63,40 +57,39 @@ class GenerateComputedAttributes extends Command
 
         // Validate chunkSize option
         $chunkSizeRaw = $this->option('chunkSize');
-        if ($chunkSizeRaw !== null) {
-            if (preg_match('/^\d+$/', $chunkSizeRaw)) {
-                $chunkSize = intval($chunkSizeRaw);
-                if ($chunkSize < 1) {
-                    $this->error('Option chunkSize needs to be greater than zero');
-
-                    return 1;
-                }
-            } else {
-                $this->error('Option chunkSize needs to be an integer');
+        if (preg_match('/^\d+$/', $chunkSizeRaw)) {
+            $chunkSize = intval($chunkSizeRaw);
+            if ($chunkSize < 1) {
+                $this->error('Option chunkSize needs to be greater than zero');
 
                 return 1;
             }
+        } else {
+            $this->error('Option chunkSize needs to be an integer greater than zero');
+
+            return 1;
         }
 
         // Calculate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
             $model = $modelAttributesEntry->getModel();
-            $this->info('Start calculating for following attributes of model "'.$model.'":');
-
             /** @var Builder|ComputedAttributes $modelInstance */
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
+
+            $this->info('Start calculating for following attributes of model "'.$model.'":');
             $this->info('['.implode(',', $attributes).']');
             if (sizeof($attributes) > 0) {
-                $modelInstance->chunk($chunkSize, function ($modelResults) use ($attributes) {
-                    /* @var Model|ComputedAttributes $modelResult */
-                    foreach ($modelResults as $modelResult) {
-                        foreach ($attributes as $attribute) {
-                            $modelResult->setComputedAttributeValue($attribute);
+                $modelInstance->computedAttributesGenerate($attributes)
+                    ->chunk($chunkSize, function ($modelResults) use ($attributes) {
+                        /* @var Model|ComputedAttributes $modelResult */
+                        foreach ($modelResults as $modelResult) {
+                            foreach ($attributes as $attribute) {
+                                $modelResult->setComputedAttributeValue($attribute);
+                            }
+                            $modelResult->save();
                         }
-                        $modelResult->save();
-                    }
-                });
+                    });
             }
         }
 

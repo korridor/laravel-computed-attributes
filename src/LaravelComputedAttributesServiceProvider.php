@@ -28,6 +28,7 @@ class LaravelComputedAttributesServiceProvider extends ServiceProvider
             ], 'computed-attributes-config');
             $this->commands([
                 Console\GenerateComputedAttributes::class,
+                Console\ValidateComputedAttributes::class,
             ]);
         }
         $this->app->bind(ModelAttributeParser::class, function () {

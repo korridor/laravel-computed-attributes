@@ -6,13 +6,6 @@ language: php
 
 matrix:
     include:
-        # Laravel 5.6.*
-        -   php: 7.1
-            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
-        -   php: 7.2
-            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
-        -   php: 7.3
-            env: LARAVEL='5.6.*' TESTBENCH='3.6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         # Laravel 5.7.*
         -   php: 7.1
             env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'

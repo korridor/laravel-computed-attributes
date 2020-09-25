@@ -2,6 +2,7 @@
 
 namespace Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
@@ -11,6 +12,9 @@ class Post extends Model
     use ComputedAttributes;
 
     /**
+     * The attributes that are computed. (f.e. for performance reasons)
+     * These attributes can be regenerated at any time.
+     *
      * @var array
      */
     protected $computed = [
@@ -19,9 +23,23 @@ class Post extends Model
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'complex_calculation' => 'int',
+        'sum_of_votes' => 'int',
+    ];
+
+    /*
+     * Computed attributes.
+     */
+
+    /**
      * @return int
      */
-    public function getComplexCalculationComputed()
+    public function getComplexCalculationComputed(): int
     {
         return 1 + 2;
     }
@@ -29,9 +47,43 @@ class Post extends Model
     /**
      * @return int
      */
-    public function getSumOfVotesComputed()
+    public function getSumOfVotesComputed(): int
     {
-        return $this->votes()->sum('rating');
+        return $this->votes->sum('rating');
+    }
+
+    /*
+     * Scopes.
+     */
+
+    /**
+     * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
+     *
+     * @param Builder $builder
+     * @param array $attributes Attributes that will be generated.
+     * @return Builder
+     */
+    public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder
+    {
+        if (in_array('sum_of_votes', $attributes)) {
+            return $builder->with('votes');
+        }
+        return $builder;
+    }
+
+    /**
+     * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
+     *
+     * @param Builder $builder
+     * @param array $attributes Attributes that will be validated.
+     * @return Builder
+     */
+    public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder
+    {
+        if (in_array('sum_of_votes', $attributes)) {
+            return $builder->with('votes');
+        }
+        return $builder;
     }
 
     /*
