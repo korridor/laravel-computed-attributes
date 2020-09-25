@@ -110,6 +110,7 @@ class ValidateComputedAttributes extends Command
         if ($var === null) {
             return 'null';
         }
+
         return gettype($var).'('.$var.')';
     }
 }

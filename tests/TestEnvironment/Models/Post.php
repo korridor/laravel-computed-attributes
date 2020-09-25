@@ -68,6 +68,7 @@ class Post extends Model
         if (in_array('sum_of_votes', $attributes)) {
             return $builder->with('votes');
         }
+
         return $builder;
     }
 
@@ -83,6 +84,7 @@ class Post extends Model
         if (in_array('sum_of_votes', $attributes)) {
             return $builder->with('votes');
         }
+
         return $builder;
     }
 
