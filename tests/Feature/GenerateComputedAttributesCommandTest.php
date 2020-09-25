@@ -36,8 +36,8 @@ class GenerateComputedAttributesCommandTest extends TestCase
 
         // Act
         $this->artisan('computed-attributes:generate', [
-                'modelsAttributes' => null,
-            ])
+            'modelsAttributes' => null,
+        ])
             ->expectsOutput('Start calculating for following attributes of model '.
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation,sum_of_votes]')
@@ -76,8 +76,8 @@ class GenerateComputedAttributesCommandTest extends TestCase
 
         // Act
         $this->artisan('computed-attributes:generate', [
-                'modelsAttributes' => 'Post:sum_of_votes',
-            ])
+            'modelsAttributes' => 'Post:sum_of_votes',
+        ])
             ->expectsOutput('Start calculating for following attributes of model '.
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[sum_of_votes]')
@@ -95,8 +95,8 @@ class GenerateComputedAttributesCommandTest extends TestCase
     public function testNonNumericChunkSizeIsReturnsErrorMessage()
     {
         $this->artisan('computed-attributes:generate', [
-                '--chunkSize' => 'text'
-            ])
+            '--chunkSize' => 'text',
+        ])
             ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
             ->assertExitCode(1)
             ->execute();
@@ -105,8 +105,8 @@ class GenerateComputedAttributesCommandTest extends TestCase
     public function testNegativeChunkSizeReturnsErrorMessage()
     {
         $this->artisan('computed-attributes:generate', [
-                '--chunkSize' => '-10'
-            ])
+            '--chunkSize' => '-10',
+        ])
             ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
             ->assertExitCode(1)
             ->execute();
@@ -115,8 +115,8 @@ class GenerateComputedAttributesCommandTest extends TestCase
     public function testZeroAsChunkSizeReturnsErrorMessage()
     {
         $this->artisan('computed-attributes:generate', [
-                '--chunkSize' => '0'
-            ])
+            '--chunkSize' => '0',
+        ])
             ->expectsOutput('Option chunkSize needs to be greater than zero')
             ->assertExitCode(1)
             ->execute();
