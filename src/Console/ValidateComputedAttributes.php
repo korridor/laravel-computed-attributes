@@ -3,27 +3,24 @@
 namespace Korridor\LaravelComputedAttributes\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
 use Korridor\LaravelComputedAttributes\Parser\ModelAttributeParser;
 use Korridor\LaravelComputedAttributes\Parser\ParsingException;
-use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post;
 use ReflectionException;
 
 /**
  * Class GenerateComputedAttributes.
  */
-class GenerateComputedAttributes extends Command
+class ValidateComputedAttributes extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'computed-attributes:generate ' .
-    '{modelsAttributes? : List of models and optionally their attributes (example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} ' .
+    protected $signature = 'computed-attributes:validate '.
+    '{modelsAttributes? : List of models and optionally their attributes (example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace/OtherModel")} '.
     '{--chunkSize= : Size of the model chunk}';
 
     /**
@@ -34,10 +31,17 @@ class GenerateComputedAttributes extends Command
     protected $description = '';
 
     /**
-     * Create a new command instance.
+     * @var ModelAttributeParser
      */
-    public function __construct()
+    private $modelAttributeParser;
+
+    /**
+     * Create a new command instance.
+     * @param ModelAttributeParser $modelAttributeParser
+     */
+    public function __construct(ModelAttributeParser $modelAttributeParser)
     {
+        $this->modelAttributeParser = $modelAttributeParser;
         parent::__construct();
     }
 
@@ -54,11 +58,9 @@ class GenerateComputedAttributes extends Command
         $this->info('Parsing arguments...');
 
         // Validate and parse modelsAttributes argument
-        $modelAttributeParser = app(ModelAttributeParser::class);
         try {
-            $modelAttributesEntries = $modelAttributeParser->getModelAttributeEntries($modelsWithAttributes);
+            $modelAttributesEntries = $this->modelAttributeParser->getModelAttributeEntries($modelsWithAttributes);
         } catch (ParsingException $exception) {
-        	var_dump($exception->getMessage());
             $this->error($exception->getMessage());
 
             return 1;
@@ -81,27 +83,29 @@ class GenerateComputedAttributes extends Command
             }
         }
 
-        // Calculate
+        // Validate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
-            $model = $modelAttributesEntry->getModel();
-            $this->info('Start calculating for following attributes of model "' . $model . '":');
-
-            /** @var Builder|ComputedAttributes $modelInstance */
-            $modelInstance = new $model();
+            /** @var Model|ComputedAttributes $modelInstance */
+            $modelInstance = ($modelAttributesEntry->getModel())();
             $attributes = $modelAttributesEntry->getAttributes();
-            $this->info('[' . implode(',', $attributes) . ']');
+
+            $this->info('Start validating for following attributes of model "'.$modelAttributesEntry->getModel().'": '.implode(',', $attributes).'');
             if (sizeof($attributes) > 0) {
-                $modelInstance->chunk($chunkSize, function ($modelResults) use ($attributes) {
+                $modelInstance->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry) {
                     /* @var Model|ComputedAttributes $modelResult */
                     foreach ($modelResults as $modelResult) {
                         foreach ($attributes as $attribute) {
-                            $modelResult->setComputedAttributeValue($attribute);
+                            if ($modelResult->getComputedAttributeValue($attribute) !== $modelResult->{$attribute}) {
+                                $this->info($modelAttributesEntry->getModel().'['.$modelResult->getKeyName().'='.$modelResult->getKey().']['.$attribute.']');
+                                $this->info('Current value: '.$modelResult->{$attribute});
+                                $this->info('Calculated value: '.$modelResult->getComputedAttributeValue($attribute));
+                            }
                         }
-                        $modelResult->save();
                     }
                 });
             }
         }
-        return 0;
+
+        return true;
     }
 }
