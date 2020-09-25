@@ -4,6 +4,7 @@ namespace Korridor\LaravelComputedAttributes\Parser;
 
 use Composer\Autoload\ClassMapGenerator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
 use ReflectionClass;
 use ReflectionException;
@@ -22,7 +23,7 @@ class ModelAttributeParser
      */
     public function getAbsolutePathOfModelFolder(): string
     {
-        return base_path(config('computed-attributes.model_path'));
+        return base_path(Config::get('computed-attributes.model_path'));
     }
 
     /**
@@ -30,7 +31,7 @@ class ModelAttributeParser
      */
     public function getModelNamespaceBase(): string
     {
-        return config('computed-attributes.model_namespace').'\\';
+        return Config::get('computed-attributes.model_namespace').'\\';
     }
 
     /**

@@ -31,7 +31,7 @@ This package is tested for the following Laravel versions:
  
 ## Usage examples
 
-See folder `tests/TestEnvironment.
+See folder `tests/TestEnvironment`.
 
 ## Contributing
 
