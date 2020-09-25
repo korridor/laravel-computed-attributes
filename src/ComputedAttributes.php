@@ -2,7 +2,7 @@
 
 namespace Korridor\LaravelComputedAttributes;
 
-use Str;
+use Illuminate\Support\Str;
 
 trait ComputedAttributes
 {
