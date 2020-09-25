@@ -10,7 +10,6 @@ use ReflectionException;
 
 class ModelAttributeParser
 {
-
     /**
      * ModelAttributeParser constructor.
      */
@@ -53,6 +52,7 @@ class ModelAttributeParser
                 }
             }
         }
+
         return $models;
     }
 
@@ -91,7 +91,7 @@ class ModelAttributeParser
                 if (2 === sizeof($modelInAttributeExploded)) {
                     $attributeWhitelistItems = explode(',', $modelInAttributeExploded[1]);
                     foreach ($attributeWhitelistItems as $attributeWhitelistItem) {
-                        if (!in_array($attributeWhitelistItem, $attributes)) {
+                        if (! in_array($attributeWhitelistItem, $attributes)) {
                             throw new ParsingException('Attribute "'.$attributeWhitelistItem.
                                 '" does not exist in model '.$model);
                         }
@@ -101,6 +101,7 @@ class ModelAttributeParser
                 array_push($modelAttributesToProcess, new ModelAttributesEntry($model, $attributes));
             }
         }
+
         return $modelAttributesToProcess;
     }
 }

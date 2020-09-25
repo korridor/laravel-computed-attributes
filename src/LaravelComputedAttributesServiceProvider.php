@@ -24,7 +24,7 @@ class LaravelComputedAttributesServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/computed-attributes.php' => config_path('computed-attributes.php'),
+                __DIR__.'/../config/computed-attributes.php' => config_path('computed-attributes.php'),
             ], 'computed-attributes-config');
             $this->commands([
                 Console\GenerateComputedAttributes::class,
@@ -33,9 +33,9 @@ class LaravelComputedAttributesServiceProvider extends ServiceProvider
         $this->app->bind(ModelAttributeParser::class, function () {
             return new ModelAttributeParser();
         });
-        if (!$this->app->configurationIsCached()) {
+        if (! $this->app->configurationIsCached()) {
             $this->mergeConfigFrom(
-                __DIR__ . '/../config/computed-attributes.php',
+                __DIR__.'/../config/computed-attributes.php',
                 'computed-attributes-config'
             );
         }

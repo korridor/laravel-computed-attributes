@@ -12,12 +12,12 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/TestEnvironment/Migrations');
+        $this->loadMigrationsFrom(__DIR__.'/TestEnvironment/Migrations');
     }
 
     protected function getEnvironmentSetUp($app)
     {
-        $app->setBasePath(__DIR__ . '/TestEnvironment');
+        $app->setBasePath(__DIR__.'/TestEnvironment');
     }
 
     /**

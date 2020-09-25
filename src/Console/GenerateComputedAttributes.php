@@ -5,11 +5,9 @@ namespace Korridor\LaravelComputedAttributes\Console;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
 use Korridor\LaravelComputedAttributes\Parser\ModelAttributeParser;
 use Korridor\LaravelComputedAttributes\Parser\ParsingException;
-use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post;
 use ReflectionException;
 
 /**
@@ -22,8 +20,8 @@ class GenerateComputedAttributes extends Command
      *
      * @var string
      */
-    protected $signature = 'computed-attributes:generate ' .
-    '{modelsAttributes? : List of models and optionally their attributes (example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} ' .
+    protected $signature = 'computed-attributes:generate '.
+    '{modelsAttributes? : List of models and optionally their attributes (example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} '.
     '{--chunkSize= : Size of the model chunk}';
 
     /**
@@ -58,7 +56,7 @@ class GenerateComputedAttributes extends Command
         try {
             $modelAttributesEntries = $modelAttributeParser->getModelAttributeEntries($modelsWithAttributes);
         } catch (ParsingException $exception) {
-        	var_dump($exception->getMessage());
+            var_dump($exception->getMessage());
             $this->error($exception->getMessage());
 
             return 1;
@@ -84,12 +82,12 @@ class GenerateComputedAttributes extends Command
         // Calculate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
             $model = $modelAttributesEntry->getModel();
-            $this->info('Start calculating for following attributes of model "' . $model . '":');
+            $this->info('Start calculating for following attributes of model "'.$model.'":');
 
             /** @var Builder|ComputedAttributes $modelInstance */
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
-            $this->info('[' . implode(',', $attributes) . ']');
+            $this->info('['.implode(',', $attributes).']');
             if (sizeof($attributes) > 0) {
                 $modelInstance->chunk($chunkSize, function ($modelResults) use ($attributes) {
                     /* @var Model|ComputedAttributes $modelResult */
@@ -102,6 +100,7 @@ class GenerateComputedAttributes extends Command
                 });
             }
         }
+
         return 0;
     }
 }
