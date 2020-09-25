@@ -98,7 +98,7 @@ class ValidateComputedAttributes extends Command
             }
         }
 
-        return true;
+        return 0;
     }
 
     /**
