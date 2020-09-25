@@ -56,7 +56,6 @@ class GenerateComputedAttributes extends Command
         try {
             $modelAttributesEntries = $modelAttributeParser->getModelAttributeEntries($modelsWithAttributes);
         } catch (ParsingException $exception) {
-            var_dump($exception->getMessage());
             $this->error($exception->getMessage());
 
             return 1;
