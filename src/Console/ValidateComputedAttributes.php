@@ -13,17 +13,17 @@ use ReflectionException;
 /**
  * Class GenerateComputedAttributes.
  */
-class GenerateComputedAttributes extends Command
+class ValidateComputedAttributes extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'computed-attributes:generate '.
+    protected $signature = 'computed-attributes:validate '.
         '{modelsAttributes? : List of models and optionally their attributes, '.
         'if not given all models that use the ComputedAttributes trait '.
-        '(example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} '.
+        '(example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace/OtherModel")} '.
         '{--chunkSize=500 : Size of the model chunk}';
 
     /**
@@ -31,7 +31,7 @@ class GenerateComputedAttributes extends Command
      *
      * @var string
      */
-    protected $description = '(Re-)generates and saves the given computed attributes.';
+    protected $description = 'Validates the current values of the given computed attributes.';
 
     /**
      * Execute the console command.
@@ -70,29 +70,47 @@ class GenerateComputedAttributes extends Command
             return 1;
         }
 
-        // Calculate
+        // Validate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
             $model = $modelAttributesEntry->getModel();
             /** @var Builder|ComputedAttributes $modelInstance */
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
 
-            $this->info('Start calculating for following attributes of model "'.$model.'":');
+            $this->info('Start validating following attributes of model "'.$model.'":');
             $this->info('['.implode(',', $attributes).']');
             if (sizeof($attributes) > 0) {
-                $modelInstance->computedAttributesGenerate($attributes)
-                    ->chunk($chunkSize, function ($modelResults) use ($attributes) {
+                $modelInstance->computedAttributesValidate($attributes)
+                    ->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry) {
                         /* @var Model|ComputedAttributes $modelResult */
                         foreach ($modelResults as $modelResult) {
                             foreach ($attributes as $attribute) {
-                                $modelResult->setComputedAttributeValue($attribute);
+                                if ($modelResult->getComputedAttributeValue($attribute) !== $modelResult->{$attribute}) {
+                                    $this->info($modelAttributesEntry->getModel().
+                                    '['.$modelResult->getKeyName().'='.$modelResult->getKey().']['.$attribute.']');
+                                    $this->info('Current value: '.$this->varToString($modelResult->{$attribute}));
+                                    $this->info('Calculated value: '.
+                                    $this->varToString($modelResult->getComputedAttributeValue($attribute)));
+                                }
                             }
-                            $modelResult->save();
                         }
                     });
             }
         }
 
         return 0;
+    }
+
+    /**
+     * @param $var
+     * @return false|string
+     */
+    private function varToString($var)
+    {
+        if ($var === null) {
+            return 'null';
+        }
+
+        return gettype($var).'('.$var.')';
     }
 }
