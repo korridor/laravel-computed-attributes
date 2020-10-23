@@ -12,6 +12,7 @@
 ehthumbs.db
 Thumbs.db
 vendor
+coverage
 composer.lock
 .php_cs.cache
 .phpunit.result.cache
