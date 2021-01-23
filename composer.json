@@ -13,7 +13,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.1",
-        "composer/composer": "^1.10",
+        "composer/composer": "^1.10 || ^2",
         "illuminate/console": "^5.7|^6|^7|^8",
         "illuminate/database": "^5.7|^6|^7|^8",
         "illuminate/support": "^5.7|^6|^7|^8"
