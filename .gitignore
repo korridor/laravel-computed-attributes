@@ -10,6 +10,9 @@
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+
+# Custom #
+######################
 Thumbs.db
 vendor
 coverage

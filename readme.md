@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/korridor/laravel-computed-attributes?style=flat-square)](https://packagist.org/packages/korridor/laravel-computed-attributes)
 [![License](https://img.shields.io/packagist/l/korridor/laravel-computed-attributes?style=flat-square)](license.md)
-[![Codecov](https://img.shields.io/codecov/c/github/korridor/laravel-computed-attributes?style=flat-square)](https://codecov.io/gh/korridor/laravel-computed-attribute)
+[![Codecov](https://img.shields.io/codecov/c/github/korridor/laravel-computed-attributes?style=flat-square)](https://codecov.io/gh/korridor/laravel-computed-attributes)
 [![TravisCI](https://img.shields.io/travis/korridor/laravel-computed-attributes?style=flat-square)](https://travis-ci.org/korridor/laravel-computed-attributes)
 [![StyleCI](https://styleci.io/repos/226346821/shield)](https://styleci.io/repos/226346821)
 
@@ -161,7 +161,7 @@ I am open for suggestions and contributions. Just create an issue or a pull requ
 
 ### Local docker environment
 
-The `docker` folder contains a local docker enironment for development.
+The `docker` folder contains a local docker environment for development.
 The docker workspace has composer and xdebug installed.
 
 ```bash
