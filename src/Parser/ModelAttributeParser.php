@@ -36,10 +36,12 @@ class ModelAttributeParser
 
     /**
      * Get all models classes that use the ComputedAttributes trait.
+     *
      * @return array
+     *
      * @throws ReflectionException
      */
-    public function getAllModelClasses()
+    public function getAllModelClasses(): array
     {
         // Get all models with trait
         $classmap = ClassMapGenerator::createMap($this->getAbsolutePathOfModelFolder());
@@ -58,12 +60,13 @@ class ModelAttributeParser
     }
 
     /**
-     * @param string|null $modelsWithAttributes
+     * @param  string|null  $modelsWithAttributes
      * @return ModelAttributesEntry[]
+     *
      * @throws ParsingException
      * @throws ReflectionException
      */
-    public function getModelAttributeEntries(?string $modelsWithAttributes = null)
+    public function getModelAttributeEntries(?string $modelsWithAttributes = null): array
     {
         $modelAttributesToProcess = [];
         $models = $this->getAllModelClasses();

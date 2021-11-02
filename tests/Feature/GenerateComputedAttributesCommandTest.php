@@ -12,7 +12,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testCommandComputesAttributesForAllModelsWithTraitAndAllThereAttributes()
+    public function testCommandComputesAttributesForAllModelsWithTraitAndAllThereAttributes(): void
     {
         // Arrange
         $post = new Post();
@@ -52,7 +52,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
         ]);
     }
 
-    public function testCommandCanOnlyCalculateOneAttributeOfOneModelIfSpecifiedInArgument()
+    public function testCommandCanOnlyCalculateOneAttributeOfOneModelIfSpecifiedInArgument(): void
     {
         // Arrange
         $post = new Post();
@@ -92,7 +92,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
         ]);
     }
 
-    public function testNonNumericChunkSizeIsReturnsErrorMessage()
+    public function testNonNumericChunkSizeIsReturnsErrorMessage(): void
     {
         $this->artisan('computed-attributes:generate', [
             '--chunkSize' => 'text',
@@ -102,7 +102,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
             ->execute();
     }
 
-    public function testNegativeChunkSizeReturnsErrorMessage()
+    public function testNegativeChunkSizeReturnsErrorMessage(): void
     {
         $this->artisan('computed-attributes:generate', [
             '--chunkSize' => '-10',
@@ -112,7 +112,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
             ->execute();
     }
 
-    public function testZeroAsChunkSizeReturnsErrorMessage()
+    public function testZeroAsChunkSizeReturnsErrorMessage(): void
     {
         $this->artisan('computed-attributes:generate', [
             '--chunkSize' => '0',

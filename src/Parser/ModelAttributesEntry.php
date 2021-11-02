@@ -16,8 +16,9 @@ class ModelAttributesEntry
 
     /**
      * ModelAttributesEntry constructor.
-     * @param string $model
-     * @param string[] $attributes
+     *
+     * @param  string  $model
+     * @param  string[]  $attributes
      */
     public function __construct(string $model, array $attributes)
     {
