@@ -59,8 +59,8 @@ class Post extends Model
     /**
      * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
      *
-     * @param Builder $builder
-     * @param array $attributes Attributes that will be generated.
+     * @param  Builder  $builder
+     * @param  array  $attributes  Attributes that will be generated.
      * @return Builder
      */
     public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder
@@ -75,8 +75,8 @@ class Post extends Model
     /**
      * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
      *
-     * @param Builder $builder
-     * @param array $attributes Attributes that will be validated.
+     * @param  Builder  $builder
+     * @param  array  $attributes  Attributes that will be validated.
      * @return Builder
      */
     public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder

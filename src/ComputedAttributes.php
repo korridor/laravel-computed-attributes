@@ -15,7 +15,7 @@ trait ComputedAttributes
     /**
      * Compute the given attribute and return the result.
      *
-     * @param string $attributeName
+     * @param  string  $attributeName
      * @return mixed
      */
     public function getComputedAttributeValue(string $attributeName)
@@ -28,7 +28,7 @@ trait ComputedAttributes
     /**
      * Compute the given attribute and assign the result in the model.
      *
-     * @param string $attributeName
+     * @param  string  $attributeName
      */
     public function setComputedAttributeValue(string $attributeName): void
     {
@@ -39,8 +39,8 @@ trait ComputedAttributes
     /**
      * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
      *
-     * @param Builder $builder
-     * @param array $attributes Attributes that will be generated.
+     * @param  Builder  $builder
+     * @param  array  $attributes  Attributes that will be generated.
      * @return Builder
      */
     public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder
@@ -51,8 +51,8 @@ trait ComputedAttributes
     /**
      * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
      *
-     * @param Builder $builder
-     * @param array $attributes Attributes that will be validated.
+     * @param  Builder  $builder
+     * @param  array  $attributes  Attributes that will be validated.
      * @return Builder
      */
     public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder

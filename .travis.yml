@@ -6,14 +6,7 @@ language: php
 
 matrix:
     include:
-        # Laravel 5.7.*
-        -   php: 7.1
-            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
-        -   php: 7.2
-            env: LARAVEL='5.7.*' TESTBENCH='3.7.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         # Laravel 5.8.*
-        -   php: 7.1
-            env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.2
             env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml.old'
         -   php: 7.3
@@ -32,12 +25,12 @@ matrix:
             env: LARAVEL='7.*' TESTBENCH='5.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
         # Laravel 8.*
         -   php: 7.3
-            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml'
-        -   php: 7.3
             env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.4
             env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-lowest' PHP_UNIT_CONFIG='phpunit.xml'
         -   php: 7.4
+            env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
+        -   php: 8.0
             env: LARAVEL='8.*' TESTBENCH='6.*' COMPOSER_FLAGS='--prefer-stable' PHP_UNIT_CONFIG='phpunit.xml'
     fast_finish: true
 

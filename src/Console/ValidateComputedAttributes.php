@@ -37,9 +37,10 @@ class ValidateComputedAttributes extends Command
      * Execute the console command.
      *
      * @return int
+     *
      * @throws ReflectionException
      */
-    public function handle()
+    public function handle(): int
     {
         $modelsWithAttributes = $this->argument('modelsAttributes');
 
@@ -61,6 +62,7 @@ class ValidateComputedAttributes extends Command
         }
 
         // Validate and parse modelsAttributes argument
+        /** @var ModelAttributeParser $modelAttributeParser */
         $modelAttributeParser = app(ModelAttributeParser::class);
         try {
             $modelAttributesEntries = $modelAttributeParser->getModelAttributeEntries($modelsWithAttributes);
@@ -103,9 +105,9 @@ class ValidateComputedAttributes extends Command
 
     /**
      * @param $var
-     * @return false|string
+     * @return string
      */
-    private function varToString($var)
+    private function varToString($var): string
     {
         if ($var === null) {
             return 'null';
