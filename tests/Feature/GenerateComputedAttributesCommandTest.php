@@ -4,7 +4,10 @@ namespace Korridor\LaravelComputedAttributes\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
 use Korridor\LaravelComputedAttributes\Tests\TestCase;
+use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaved;
+use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaving;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Vote;
 
@@ -33,6 +36,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
             'complex_calculation' => null,
             'sum_of_votes' => 0,
         ]);
+        Event::fake();
 
         // Act
         $this->artisan('computed-attributes:generate', [
@@ -50,6 +54,8 @@ class GenerateComputedAttributesCommandTest extends TestCase
             'complex_calculation' => 3,
             'sum_of_votes' => 4,
         ]);
+        Event::assertDispatched(PostSaved::class);
+        Event::assertDispatched(PostSaving::class);
     }
 
     public function testCommandCanOnlyCalculateOneAttributeOfOneModelIfSpecifiedInArgument(): void
@@ -120,5 +126,45 @@ class GenerateComputedAttributesCommandTest extends TestCase
             ->expectsOutput('Option chunkSize needs to be greater than zero')
             ->assertExitCode(1)
             ->execute();
+    }
+
+    public function testGenerateAttributesCommandWillNotDispatchEventsIfNotDirty(): void
+    {
+        // Arrange
+        $post = new Post();
+        $post->title = 'titleTest';
+        $post->content = 'Text';
+        $post->complex_calculation = 3;
+        $post->save();
+        Config::set('computed-attributes.model_path', 'Models');
+        Config::set(
+            'computed-attributes.model_namespace',
+            'Korridor\\LaravelComputedAttributes\\Tests\\TestEnvironment\\Models'
+        );
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'complex_calculation' => 3,
+            'sum_of_votes' => 0,
+        ]);
+        Event::fake();
+
+        // Act
+        $this->artisan('computed-attributes:generate', [
+            'modelsAttributes' => 'Post:complex_calculation',
+        ])
+            ->expectsOutput('Start calculating for following attributes of model '.
+                '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
+            ->expectsOutput('[complex_calculation]')
+            ->assertExitCode(0)
+            ->execute();
+
+        // Assert
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'complex_calculation' => 3,
+            'sum_of_votes' => 0,
+        ]);
+        Event::assertNotDispatched(PostSaved::class);
+        Event::assertNotDispatched(PostSaving::class);
     }
 }
