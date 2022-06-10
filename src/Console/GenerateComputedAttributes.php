@@ -89,7 +89,9 @@ class GenerateComputedAttributes extends Command
                             foreach ($attributes as $attribute) {
                                 $modelResult->setComputedAttributeValue($attribute);
                             }
-                            $modelResult->save();
+                            if ($modelResult->isDirty()) {
+                                $modelResult->save();
+                            }
                         }
                     });
             }

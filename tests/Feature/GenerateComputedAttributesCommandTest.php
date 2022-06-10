@@ -121,4 +121,44 @@ class GenerateComputedAttributesCommandTest extends TestCase
             ->assertExitCode(1)
             ->execute();
     }
+
+    public function testGenerateAttributesCommandWontSaveModelIfNotDirty(): void
+    {
+        // Arrange
+        $post = new Post();
+        $post->title = 'titleTest';
+        $post->content = 'Text';
+        $post->save();
+        $updatedAt = $post->fresh()->updated_at;
+
+        Config::set('computed-attributes.model_path', 'Models');
+        Config::set(
+            'computed-attributes.model_namespace',
+            'Korridor\\LaravelComputedAttributes\\Tests\\TestEnvironment\\Models'
+        );
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'complex_calculation' => null,
+            'sum_of_votes' => 0,
+            'updated_at' => $updatedAt,
+        ]);
+
+        // Act
+        $this->artisan('computed-attributes:generate', [
+            'modelsAttributes' => 'Post:sum_of_votes',
+        ])
+            ->expectsOutput('Start calculating for following attributes of model '.
+                '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
+            ->expectsOutput('[sum_of_votes]')
+            ->assertExitCode(0)
+            ->execute();
+
+        // Assert
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'complex_calculation' => null,
+            'sum_of_votes' => 0,
+            'updated_at' => $updatedAt,
+        ]);
+    }
 }
