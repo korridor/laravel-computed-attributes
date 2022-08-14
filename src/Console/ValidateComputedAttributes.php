@@ -17,6 +17,12 @@ use ReflectionException;
  */
 class ValidateComputedAttributes extends Command
 {
+
+    // Note: Fix for Laravel 6
+    public const SUCCESS = 0;
+    public const FAILURE = 1;
+    public const INVALID = 2;
+
     /**
      * The name and signature of the console command.
      *
