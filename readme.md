@@ -98,6 +98,10 @@ For the whole code of this very simple example see the `tests/TestEnvironment` f
 
 ### computed-attributes:generate
 
+```
+computed-attributes:generate { modelsAttributes? } { --chunkSize=500 } { --chunk= }
+```
+
 This command (re-)calculates the values of the computed attributes and saves the new value.
 
 #### Query optimization
@@ -127,6 +131,10 @@ public function scopeComputedAttributesGenerate(Builder $builder, array $attribu
 ```
 
 ### computed-attributes:validate
+
+```
+artisan computed-attributes:generate { modelsAttributes? } { --chunkSize=500 } { --chunk= }
+```
 
 This command validates the current values of the computed attributes.
 
