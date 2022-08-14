@@ -17,7 +17,6 @@ use ReflectionException;
  */
 class GenerateComputedAttributes extends Command
 {
-
     // Note: Fix for Laravel 6
     public const SUCCESS = 0;
     public const FAILURE = 1;
