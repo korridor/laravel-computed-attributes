@@ -133,7 +133,7 @@ public function scopeComputedAttributesGenerate(Builder $builder, array $attribu
 ### computed-attributes:validate
 
 ```
-artisan computed-attributes:generate { modelsAttributes? } { --chunkSize=500 } { --chunk= }
+artisan computed-attributes:validate { modelsAttributes? } { --chunkSize=500 } { --chunk= }
 ```
 
 This command validates the current values of the computed attributes.
