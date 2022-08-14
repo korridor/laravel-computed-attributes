@@ -167,4 +167,49 @@ class GenerateComputedAttributesCommandTest extends TestCase
         Event::assertNotDispatched(PostSaved::class);
         Event::assertNotDispatched(PostSaving::class);
     }
+
+    public function testChunkOptionCanGenerateOnlyOneBlock(): void
+    {
+        // Arrange
+        $post1 = new Post();
+        $post1->title = 'titleTest';
+        $post1->content = 'Text';
+        $post1->save();
+        $post2 = new Post();
+        $post2->title = 'titleTest';
+        $post2->content = 'Text';
+        $post2->save();
+        Config::set('computed-attributes.model_path', 'Models');
+        Config::set(
+            'computed-attributes.model_namespace',
+            'Korridor\\LaravelComputedAttributes\\Tests\\TestEnvironment\\Models'
+        );
+        $this->assertDatabaseHas('posts', [
+            'id' => $post1->id,
+            'complex_calculation' => null,
+        ]);
+        $this->assertDatabaseHas('posts', [
+            'id' => $post2->id,
+            'complex_calculation' => null,
+        ]);
+
+        // Act
+        $this->artisan('computed-attributes:generate', [
+            '--chunkSize' => '1',
+            '--chunk' => '0',
+            'modelsAttributes' => 'Post:complex_calculation',
+        ])
+            ->assertExitCode(0)
+            ->execute();
+
+        // Assert
+        $this->assertDatabaseHas('posts', [
+            'id' => $post1->id,
+            'complex_calculation' => 3,
+        ]);
+        $this->assertDatabaseHas('posts', [
+            'id' => $post2->id,
+            'complex_calculation' => null,
+        ]);
+    }
 }
