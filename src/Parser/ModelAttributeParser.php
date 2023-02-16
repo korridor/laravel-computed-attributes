@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Parser;
 
 use Composer\Autoload\ClassMapGenerator;
@@ -31,7 +33,7 @@ class ModelAttributeParser
      */
     public function getModelNamespaceBase(): string
     {
-        return Config::get('computed-attributes.model_namespace').'\\';
+        return Config::get('computed-attributes.model_namespace') . '\\';
     }
 
     /**
@@ -75,7 +77,7 @@ class ModelAttributeParser
                 /** @var Model|ComputedAttributes $modelInstance */
                 $modelInstance = new $model();
                 $attributes = $modelInstance->getComputedAttributeConfiguration();
-                array_push($modelAttributesToProcess, new ModelAttributesEntry($model, $attributes));
+                $modelAttributesToProcess[] = new ModelAttributesEntry($model, $attributes);
             }
         } else {
             $modelsInAttribute = explode(';', $modelsWithAttributes);
@@ -84,25 +86,26 @@ class ModelAttributeParser
                 if (1 !== sizeof($modelInAttributeExploded) && 2 !== sizeof($modelInAttributeExploded)) {
                     throw new ParsingException('Parsing error');
                 }
-                $model = $this->getModelNamespaceBase().str_replace('/', '\\', $modelInAttributeExploded[0]);
+                $model = $this->getModelNamespaceBase() . str_replace('/', '\\', $modelInAttributeExploded[0]);
                 if (in_array($model, $models)) {
                     /** @var Model|ComputedAttributes $modelInstance */
                     $modelInstance = new $model();
                 } else {
-                    throw new ParsingException('Model "'.$model.'" not found');
+                    throw new ParsingException('Model "' . $model . '" not found ' .
+                        '(don\'t forget to add the ComputedAttributes trait to the model)');
                 }
                 $attributes = $modelInstance->getComputedAttributeConfiguration();
                 if (2 === sizeof($modelInAttributeExploded)) {
                     $attributeWhitelistItems = explode(',', $modelInAttributeExploded[1]);
                     foreach ($attributeWhitelistItems as $attributeWhitelistItem) {
                         if (! in_array($attributeWhitelistItem, $attributes)) {
-                            throw new ParsingException('Attribute "'.$attributeWhitelistItem.
-                                '" does not exist in model '.$model);
+                            throw new ParsingException('Attribute "' . $attributeWhitelistItem .
+                                '" does not exist in model ' . $model);
                         }
                     }
                     $attributes = $attributeWhitelistItems;
                 }
-                array_push($modelAttributesToProcess, new ModelAttributesEntry($model, $attributes));
+                $modelAttributesToProcess[] = new ModelAttributesEntry($model, $attributes);
             }
         }
 

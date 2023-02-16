@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +33,7 @@ class Vote extends Model
     /**
      * Boot function from laravel.
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         /*
         Note: This listener is only commented out to test the commands on incorrect data.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -113,9 +115,9 @@ class Post extends Model
     /**
      * Boot function from laravel.
      */
-    protected static function boot()
+    protected static function boot(): void
     {
-        static::saving(function (Post $model) {
+        static::saving(function (Post $model): void {
             $model->setComputedAttributeValue('sum_of_votes');
         });
         parent::boot();

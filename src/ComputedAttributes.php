@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +22,7 @@ trait ComputedAttributes
      */
     public function getComputedAttributeValue(string $attributeName)
     {
-        $functionName = 'get'.Str::studly($attributeName).'Computed';
+        $functionName = 'get' . Str::studly($attributeName) . 'Computed';
 
         return $this->{$functionName}();
     }

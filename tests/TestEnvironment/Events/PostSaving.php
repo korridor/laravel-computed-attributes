@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -8,5 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 class PostSaving
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 }
