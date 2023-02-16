@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddVotesTable extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,7 +14,7 @@ class AddVotesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('votes', function (Blueprint $table) {
+        Schema::create('votes', function (Blueprint $table): void {
             $table->increments('id');
             $table->integer('rating');
             $table->integer('post_id');
@@ -36,4 +37,4 @@ class AddVotesTable extends Migration
     {
         Schema::dropIfExists('votes');
     }
-}
+};

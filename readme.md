@@ -2,9 +2,10 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/korridor/laravel-computed-attributes?style=flat-square)](https://packagist.org/packages/korridor/laravel-computed-attributes)
 [![License](https://img.shields.io/packagist/l/korridor/laravel-computed-attributes?style=flat-square)](license.md)
+[![Supported PHP versions](https://img.shields.io/packagist/php-v/korridor/laravel-computed-attributes?style=flat-square)](https://packagist.org/packages/korridor/laravel-computed-attributes)
+[![GitHub Workflow Lint](https://img.shields.io/github/actions/workflow/status/korridor/laravel-computed-attributes/lint.yml?label=lint&style=flat-square)](https://github.com/korridor/laravel-computed-attributes/actions/workflows/lint.yml)
+[![GitHub Workflow Tests](https://img.shields.io/github/actions/workflow/status/korridor/laravel-computed-attributes/unittests.yml?label=tests&style=flat-square)](https://github.com/korridor/laravel-computed-attributes/actions/workflows/unittests.yml)
 [![Codecov](https://img.shields.io/codecov/c/github/korridor/laravel-computed-attributes?style=flat-square)](https://codecov.io/gh/korridor/laravel-computed-attributes)
-[![TravisCI](https://img.shields.io/travis/korridor/laravel-computed-attributes?style=flat-square)](https://travis-ci.org/korridor/laravel-computed-attributes)
-[![StyleCI](https://styleci.io/repos/226346821/shield)](https://styleci.io/repos/226346821)
 
 Laravel package that adds computed attributes to eloquent models.
 A computed attribute is an accessor where the value is saved in the database.
@@ -19,14 +20,23 @@ You can install the package via composer with following command:
 composer require korridor/laravel-computed-attributes
 ```
 
+If you want to use this package with older Laravel/PHP version please install the 2.2.* version.
+
+```bash
+composer require korridor/laravel-computed-attributes "^2.2"
+```
+
+You can also publish the config file to change the default configuration (e.g. the model folder path).
+
+```bash
+php artisan vendor:publish --tag=computed-attributes-config
+```
+
 ### Requirements
 
 This package is tested for the following Laravel and PHP versions:
 
- - 9.* (PHP 8.0, 8.1)
- - 8.* (PHP 7.4, 8.0, 8.1)
- - 7.* (PHP 7.3, 7.4)
- - 6.* (PHP 7.3)
+ - 10.* (PHP 8.1, 8.2)
  
 ## Usage examples
 
@@ -44,7 +54,7 @@ class Post {
      * The attributes that are computed. (f.e. for performance reasons)
      * These attributes can be regenerated at any time.
      *
-     * @var array
+     * @var string[]
      */
     protected $computed = [
         'complex_calculation',
@@ -83,7 +93,7 @@ https://laravel.com/docs/8.x/eloquent#events
 /**
  * Boot function from laravel.
  */
-protected static function boot()
+protected static function boot(): void
 {
     static::saving(function (Post $model) {
         $model->setComputedAttributeValue('sum_of_votes');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,7 +40,7 @@ class ValidateComputedAttributesCommandTest extends TestCase
         $this->artisan('computed-attributes:validate', [
             'modelsAttributes' => null,
         ])
-            ->expectsOutput('Start validating following attributes of model '.
+            ->expectsOutput('Start validating following attributes of model ' .
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation,sum_of_votes]')
             ->expectsOutput('Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post[id=1][complex_calculation]')
@@ -84,7 +86,7 @@ class ValidateComputedAttributesCommandTest extends TestCase
         $this->artisan('computed-attributes:validate', [
             'modelsAttributes' => 'Post:sum_of_votes',
         ])
-            ->expectsOutput('Start validating following attributes of model '.
+            ->expectsOutput('Start validating following attributes of model ' .
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[sum_of_votes]')
             ->expectsOutput('Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post[id=1][sum_of_votes]')

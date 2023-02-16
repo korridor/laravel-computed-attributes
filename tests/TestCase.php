@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Tests;
 
 use Illuminate\Foundation\Application;
@@ -12,12 +14,12 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__.'/TestEnvironment/Migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/TestEnvironment/Migrations');
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
-        $app->setBasePath(__DIR__.'/TestEnvironment');
+        $app->setBasePath(__DIR__ . '/TestEnvironment');
     }
 
     /**

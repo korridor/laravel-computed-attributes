@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Console;
 
 use Illuminate\Console\Command;
@@ -27,11 +29,11 @@ class ValidateComputedAttributes extends Command
      *
      * @var string
      */
-    protected $signature = 'computed-attributes:validate '.
-        '{ modelsAttributes? : List of models and optionally their attributes, '.
-        'if not given all models that use the ComputedAttributes trait '.
-        '(example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace/OtherModel")} '.
-        '{ --chunkSize=500 : Size of the model chunk }'.
+    protected $signature = 'computed-attributes:validate ' .
+        '{ modelsAttributes? : List of models and optionally their attributes, ' .
+        'if not given all models that use the ComputedAttributes trait ' .
+        '(example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace/OtherModel")} ' .
+        '{ --chunkSize=500 : Size of the model chunk }' .
         '{ --chunk= : Process only one chunk. If the argument is missing all model entries are being processed }';
 
     /**
@@ -57,7 +59,7 @@ class ValidateComputedAttributes extends Command
         // Validate chunkSize option
         $chunkSizeRaw = $this->option('chunkSize');
         if (preg_match('/^\d+$/', $chunkSizeRaw)) {
-            $chunkSize = intval($chunkSizeRaw);
+            $chunkSize = (int) $chunkSizeRaw;
             if ($chunkSize < 1) {
                 $this->error('Option chunkSize needs to be greater than zero');
 
@@ -73,7 +75,7 @@ class ValidateComputedAttributes extends Command
         $chunkRaw = $this->option('chunk');
         if ($chunkRaw !== null) {
             if (preg_match('/^\d+$/', $chunkRaw)) {
-                $chunk = intval($chunkRaw);
+                $chunk = (int) $chunkRaw;
                 if ($chunk < 0) {
                     $this->error('Option chunk needs to be greater or equal than zero');
 
@@ -106,8 +108,8 @@ class ValidateComputedAttributes extends Command
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
 
-            $this->info('Start validating following attributes of model "'.$model.'":');
-            $this->info('['.implode(',', $attributes).']');
+            $this->info('Start validating following attributes of model "' . $model . '":');
+            $this->info('[' . implode(',', $attributes) . ']');
             if (sizeof($attributes) > 0) {
                 $query = $modelInstance->computedAttributesValidate($attributes);
 
@@ -117,7 +119,7 @@ class ValidateComputedAttributes extends Command
                         ->get();
                     $this->validateModels($modelResults, $attributes, $modelAttributesEntry);
                 } else {
-                    $query->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry) {
+                    $query->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry): void {
                         $this->validateModels($modelResults, $attributes, $modelAttributesEntry);
                     });
                 }
@@ -133,10 +135,10 @@ class ValidateComputedAttributes extends Command
         foreach ($models as $modelResult) {
             foreach ($attributes as $attribute) {
                 if ($modelResult->getComputedAttributeValue($attribute) !== $modelResult->{$attribute}) {
-                    $this->info($modelAttributesEntry->getModel().
-                        '['.$modelResult->getKeyName().'='.$modelResult->getKey().']['.$attribute.']');
-                    $this->info('Current value: '.$this->varToString($modelResult->{$attribute}));
-                    $this->info('Calculated value: '.
+                    $this->info($modelAttributesEntry->getModel() .
+                        '[' . $modelResult->getKeyName() . '=' . $modelResult->getKey() . '][' . $attribute . ']');
+                    $this->info('Current value: ' . $this->varToString($modelResult->{$attribute}));
+                    $this->info('Calculated value: ' .
                         $this->varToString($modelResult->getComputedAttributeValue($attribute)));
                 }
             }
@@ -153,6 +155,6 @@ class ValidateComputedAttributes extends Command
             return 'null';
         }
 
-        return gettype($var).'('.$var.')';
+        return gettype($var) . '(' . $var . ')';
     }
 }

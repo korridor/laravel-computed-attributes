@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Console;
 
 use Illuminate\Console\Command;
@@ -17,21 +19,16 @@ use ReflectionException;
  */
 class GenerateComputedAttributes extends Command
 {
-    // Note: Fix for Laravel 6
-    public const SUCCESS = 0;
-    public const FAILURE = 1;
-    public const INVALID = 2;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'computed-attributes:generate '.
-        '{modelsAttributes? : List of models and optionally their attributes, '.
-        'if not given all models that use the ComputedAttributes trait '.
-        '(example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} '.
-        '{ --chunkSize=500 : Size of the model chunk }'.
+    protected $signature = 'computed-attributes:generate ' .
+        '{modelsAttributes? : List of models and optionally their attributes, ' .
+        'if not given all models that use the ComputedAttributes trait ' .
+        '(example: "FullModel;PartModel:attribute_1,attribute_2" or "OtherNamespace\OtherModel")} ' .
+        '{ --chunkSize=500 : Size of the model chunk }' .
         '{ --chunk= : Process only one chunk. If the argument is missing all model entries are being processed }';
 
     /**
@@ -57,7 +54,7 @@ class GenerateComputedAttributes extends Command
         // Validate chunkSize option
         $chunkSizeRaw = $this->option('chunkSize');
         if (preg_match('/^\d+$/', $chunkSizeRaw)) {
-            $chunkSize = intval($chunkSizeRaw);
+            $chunkSize = (int) $chunkSizeRaw;
             if ($chunkSize < 1) {
                 $this->error('Option chunkSize needs to be greater than zero');
 
@@ -73,7 +70,7 @@ class GenerateComputedAttributes extends Command
         $chunkRaw = $this->option('chunk');
         if ($chunkRaw !== null) {
             if (preg_match('/^\d+$/', $chunkRaw)) {
-                $chunk = intval($chunkRaw);
+                $chunk = (int) $chunkRaw;
                 if ($chunk < 0) {
                     $this->error('Option chunk needs to be greater or equal than zero');
 
@@ -106,8 +103,8 @@ class GenerateComputedAttributes extends Command
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
 
-            $this->info('Start calculating for following attributes of model "'.$model.'":');
-            $this->info('['.implode(',', $attributes).']');
+            $this->info('Start calculating for following attributes of model "' . $model . '":');
+            $this->info('[' . implode(',', $attributes) . ']');
             if (sizeof($attributes) > 0) {
                 $query = $modelInstance->computedAttributesGenerate($attributes);
 
@@ -117,7 +114,7 @@ class GenerateComputedAttributes extends Command
                         ->get();
                     $this->generateModels($modelResults, $attributes, $modelAttributesEntry);
                 } else {
-                    $query->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry) {
+                    $query->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry): void {
                         $this->generateModels($modelResults, $attributes, $modelAttributesEntry);
                     });
                 }

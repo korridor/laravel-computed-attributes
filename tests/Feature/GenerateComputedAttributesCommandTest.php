@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Korridor\LaravelComputedAttributes\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -42,7 +44,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
         $this->artisan('computed-attributes:generate', [
             'modelsAttributes' => null,
         ])
-            ->expectsOutput('Start calculating for following attributes of model '.
+            ->expectsOutput('Start calculating for following attributes of model ' .
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation,sum_of_votes]')
             ->assertExitCode(0)
@@ -84,7 +86,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
         $this->artisan('computed-attributes:generate', [
             'modelsAttributes' => 'Post:sum_of_votes',
         ])
-            ->expectsOutput('Start calculating for following attributes of model '.
+            ->expectsOutput('Start calculating for following attributes of model ' .
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[sum_of_votes]')
             ->assertExitCode(0)
@@ -152,7 +154,7 @@ class GenerateComputedAttributesCommandTest extends TestCase
         $this->artisan('computed-attributes:generate', [
             'modelsAttributes' => 'Post:complex_calculation',
         ])
-            ->expectsOutput('Start calculating for following attributes of model '.
+            ->expectsOutput('Start calculating for following attributes of model ' .
                 '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation]')
             ->assertExitCode(0)
