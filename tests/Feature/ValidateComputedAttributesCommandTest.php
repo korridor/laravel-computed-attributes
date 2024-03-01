@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Korridor\LaravelComputedAttributes\Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Korridor\LaravelComputedAttributes\Tests\TestCase;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post;
@@ -12,8 +11,6 @@ use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Vote;
 
 class ValidateComputedAttributesCommandTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testCommandComputesAttributesForAllModelsWithTraitAndAllThereAttributes(): void
     {
         // Arrange

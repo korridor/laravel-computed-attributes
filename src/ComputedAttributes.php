@@ -20,7 +20,7 @@ trait ComputedAttributes
      * @param  string  $attributeName
      * @return mixed
      */
-    public function getComputedAttributeValue(string $attributeName)
+    public function getComputedAttributeValue(string $attributeName): mixed
     {
         $functionName = 'get' . Str::studly($attributeName) . 'Computed';
 
@@ -66,14 +66,10 @@ trait ComputedAttributes
      * Return the configuration array for this model.
      * If the configuration array does not exist the function will return an empty array.
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getComputedAttributeConfiguration(): array
     {
-        if (isset($this->computed)) {
-            return $this->computed;
-        } else {
-            return [];
-        }
+        return $this->computed ?? [];
     }
 }

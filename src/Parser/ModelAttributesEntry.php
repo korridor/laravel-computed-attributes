@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace Korridor\LaravelComputedAttributes\Parser;
 
+use Illuminate\Database\Eloquent\Model;
+use Korridor\LaravelComputedAttributes\ComputedAttributes;
+
 class ModelAttributesEntry
 {
     /**
-     * @var string
+     * @var class-string<Model>
      */
-    private $model;
+    private string $model;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
-    private $attributes;
+    private array $attributes;
 
     /**
      * ModelAttributesEntry constructor.
      *
-     * @param  string  $model
-     * @param  string[]  $attributes
+     * @param  class-string<Model>  $model
+     * @param  array<int, string>  $attributes
      */
     public function __construct(string $model, array $attributes)
     {
@@ -29,7 +32,7 @@ class ModelAttributesEntry
     }
 
     /**
-     * @return string
+     * @return class-string<Model|ComputedAttributes>
      */
     public function getModel(): string
     {
@@ -37,7 +40,7 @@ class ModelAttributesEntry
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getAttributes(): array
     {
