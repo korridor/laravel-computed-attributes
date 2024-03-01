@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Korridor\LaravelComputedAttributes\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
@@ -99,7 +98,7 @@ class GenerateComputedAttributes extends Command
         // Calculate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
             $model = $modelAttributesEntry->getModel();
-            /** @var Builder|ComputedAttributes $modelInstance */
+            /** @var Model|ComputedAttributes $modelInstance */
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
 

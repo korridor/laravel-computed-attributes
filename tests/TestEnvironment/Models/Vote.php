@@ -7,12 +7,16 @@ namespace Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $rating
+ */
 class Vote extends Model
 {
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'rating' => 'int',
@@ -23,7 +27,7 @@ class Vote extends Model
      */
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Post, Vote>
      */
     public function post(): BelongsTo
     {

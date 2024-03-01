@@ -5,12 +5,21 @@ declare(strict_types=1);
 namespace Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaved;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaving;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $content
+ * @property int $complex_calculation
+ * @property int $sum_of_votes
+ * @property-read Collection<Vote> $votes
+ */
 class Post extends Model
 {
     use ComputedAttributes;
@@ -19,9 +28,9 @@ class Post extends Model
      * The attributes that are computed. (f.e. for performance reasons)
      * These attributes can be regenerated at any time.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $computed = [
+    protected array $computed = [
         'complex_calculation',
         'sum_of_votes',
     ];
@@ -29,7 +38,7 @@ class Post extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'complex_calculation' => 'int',
@@ -37,7 +46,7 @@ class Post extends Model
     ];
 
     /**
-     * @var array
+     * @var array<string, class-string>
      */
     protected $dispatchesEvents = [
         'saved' => PostSaved::class,
@@ -71,9 +80,9 @@ class Post extends Model
     /**
      * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
      *
-     * @param  Builder  $builder
-     * @param  array  $attributes  Attributes that will be generated.
-     * @return Builder
+     * @param  Builder<self>  $builder
+     * @param  array<string>  $attributes  Attributes that will be generated.
+     * @return Builder<self>
      */
     public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder
     {
@@ -87,9 +96,9 @@ class Post extends Model
     /**
      * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
      *
-     * @param  Builder  $builder
-     * @param  array  $attributes  Attributes that will be validated.
-     * @return Builder
+     * @param  Builder<self>  $builder
+     * @param  array<string>  $attributes  Attributes that will be validated.
+     * @return Builder<self>
      */
     public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder
     {
@@ -105,7 +114,7 @@ class Post extends Model
      */
 
     /**
-     * @return HasMany|Vote
+     * @return HasMany<Vote>
      */
     public function votes(): HasMany
     {

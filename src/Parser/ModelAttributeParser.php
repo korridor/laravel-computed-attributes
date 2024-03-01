@@ -14,13 +14,6 @@ use ReflectionException;
 class ModelAttributeParser
 {
     /**
-     * ModelAttributeParser constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * @return string
      */
     public function getAbsolutePathOfModelFolder(): string
@@ -53,7 +46,7 @@ class ModelAttributeParser
             $traits = $reflection->getTraitNames();
             foreach ($traits as $trait) {
                 if ('Korridor\\LaravelComputedAttributes\\ComputedAttributes' === $trait) {
-                    array_push($models, $class);
+                    $models[] = $class;
                 }
             }
         }
