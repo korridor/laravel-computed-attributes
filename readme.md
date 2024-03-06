@@ -12,6 +12,9 @@ A computed attribute is an accessor where the value is saved in the database.
 The value can be regenerated or validated at any time.
 This can increase performance (no calculation at every get/fetch) and it can simplify querying the database (f.e. complex filter system). 
 
+> [!NOTE]
+> Check out **solidtime - The modern Open Source Time-Tracker** at [solidtime.io](https://www.solidtime.io)
+
 ## Installation
 
 You can install the package via composer with following command:
