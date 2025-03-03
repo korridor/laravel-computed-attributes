@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Korridor\LaravelComputedAttributes\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Testing\PendingCommand;
 use Korridor\LaravelComputedAttributes\Tests\TestCase;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Vote;
 
 class ValidateComputedAttributesCommandTest extends TestCase
 {
+    public $mockConsoleOutput = true;
+
     public function testCommandComputesAttributesForAllModelsWithTraitAndAllThereAttributes(): void
     {
         // Arrange
@@ -34,11 +37,14 @@ class ValidateComputedAttributesCommandTest extends TestCase
         ]);
 
         // Act
-        $this->artisan('computed-attributes:validate', [
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:validate', [
             'modelsAttributes' => null,
-        ])
-            ->expectsOutput('Start validating following attributes of model ' .
-                '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Start validating following attributes of model ' .
+            '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation,sum_of_votes]')
             ->expectsOutput('Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post[id=1][complex_calculation]')
             ->expectsOutput('Current value: null')
@@ -48,8 +54,6 @@ class ValidateComputedAttributesCommandTest extends TestCase
             ->expectsOutput('Calculated value: integer(4)')
             ->assertExitCode(0)
             ->execute();
-
-        // Assert
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'complex_calculation' => null,
@@ -80,19 +84,20 @@ class ValidateComputedAttributesCommandTest extends TestCase
         ]);
 
         // Act
-        $this->artisan('computed-attributes:validate', [
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:validate', [
             'modelsAttributes' => 'Post:sum_of_votes',
-        ])
-            ->expectsOutput('Start validating following attributes of model ' .
-                '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Start validating following attributes of model ' .
+            '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[sum_of_votes]')
             ->expectsOutput('Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post[id=1][sum_of_votes]')
             ->expectsOutput('Current value: integer(0)')
             ->expectsOutput('Calculated value: integer(4)')
             ->assertExitCode(0)
             ->execute();
-
-        // Assert
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'complex_calculation' => null,
@@ -102,30 +107,42 @@ class ValidateComputedAttributesCommandTest extends TestCase
 
     public function testNonNumericChunkSizeIsReturnsErrorMessage(): void
     {
-        $this->artisan('computed-attributes:validate', [
+        // Act
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:validate', [
             '--chunkSize' => 'text',
-        ])
-            ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Option chunkSize needs to be an integer greater than zero')
             ->assertExitCode(1)
             ->execute();
     }
 
     public function testNegativeChunkSizeReturnsErrorMessage(): void
     {
-        $this->artisan('computed-attributes:validate', [
+        // Act
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:validate', [
             '--chunkSize' => '-10',
-        ])
-            ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Option chunkSize needs to be an integer greater than zero')
             ->assertExitCode(1)
             ->execute();
     }
 
     public function testZeroAsChunkSizeReturnsErrorMessage(): void
     {
-        $this->artisan('computed-attributes:validate', [
+        // Act
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:validate', [
             '--chunkSize' => '0',
-        ])
-            ->expectsOutput('Option chunkSize needs to be greater than zero')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Option chunkSize needs to be greater than zero')
             ->assertExitCode(1)
             ->execute();
     }

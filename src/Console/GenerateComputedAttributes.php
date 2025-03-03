@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Korridor\LaravelComputedAttributes\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Korridor\LaravelComputedAttributes\ComputedAttributes;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Korridor\LaravelComputedAttributes\ComputedAttributesInterface;
 use Korridor\LaravelComputedAttributes\Parser\ModelAttributeParser;
 use Korridor\LaravelComputedAttributes\Parser\ModelAttributesEntry;
 use Korridor\LaravelComputedAttributes\Parser\ParsingException;
@@ -46,13 +48,19 @@ class GenerateComputedAttributes extends Command
      */
     public function handle(): int
     {
-        $modelsWithAttributes = $this->argument('modelsAttributes');
-
         $this->info('Parsing arguments...');
+
+        // Validate modelsAttributes argument
+        $modelsWithAttributes = $this->argument('modelsAttributes');
+        if ($modelsWithAttributes !== null && !is_string($modelsWithAttributes)) {
+            $this->error('Argument modelsAttributes needs to be a string');
+
+            return self::FAILURE;
+        }
 
         // Validate chunkSize option
         $chunkSizeRaw = $this->option('chunkSize');
-        if (preg_match('/^\d+$/', $chunkSizeRaw)) {
+        if (is_string($chunkSizeRaw) && preg_match('/^\d+$/', $chunkSizeRaw)) {
             $chunkSize = (int) $chunkSizeRaw;
             if ($chunkSize < 1) {
                 $this->error('Option chunkSize needs to be greater than zero');
@@ -68,7 +76,7 @@ class GenerateComputedAttributes extends Command
         // Validate block option
         $chunkRaw = $this->option('chunk');
         if ($chunkRaw !== null) {
-            if (preg_match('/^\d+$/', $chunkRaw)) {
+            if (is_string($chunkRaw) && preg_match('/^\d+$/', $chunkRaw)) {
                 $chunk = (int) $chunkRaw;
                 if ($chunk < 0) {
                     $this->error('Option chunk needs to be greater or equal than zero');
@@ -98,7 +106,7 @@ class GenerateComputedAttributes extends Command
         // Calculate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
             $model = $modelAttributesEntry->getModel();
-            /** @var Model|ComputedAttributes $modelInstance */
+            /** @var Model&ComputedAttributesInterface $modelInstance */
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
 
@@ -123,9 +131,14 @@ class GenerateComputedAttributes extends Command
         return self::SUCCESS;
     }
 
-    private function generateModels(Collection $models, array $attributes, ModelAttributesEntry $modelAttributesEntry): void
+    /**
+     * @param EloquentCollection<array-key, Model&ComputedAttributesInterface> $models
+     * @param array<string> $attributes
+     * @param ModelAttributesEntry $modelAttributesEntry
+     * @return void
+     */
+    private function generateModels(EloquentCollection $models, array $attributes, ModelAttributesEntry $modelAttributesEntry): void
     {
-        /* @var Model|ComputedAttributes $modelResult */
         foreach ($models as $modelResult) {
             foreach ($attributes as $attribute) {
                 $modelResult->setComputedAttributeValue($attribute);

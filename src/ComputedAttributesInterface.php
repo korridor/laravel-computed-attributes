@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
  * @method Builder<static> computedAttributesGenerate(array<string> $attributes)
  * @phpstan-require-extends Model
  */
-trait ComputedAttributes
+interface ComputedAttributesInterface
 {
     /**
      * Compute the given attribute and return the result.
@@ -21,47 +21,34 @@ trait ComputedAttributes
      * @param  string  $attributeName
      * @return mixed
      */
-    public function getComputedAttributeValue(string $attributeName): mixed
-    {
-        $functionName = 'get' . Str::studly($attributeName) . 'Computed';
-
-        return $this->{$functionName}();
-    }
+    public function getComputedAttributeValue(string $attributeName): mixed;
 
     /**
      * Compute the given attribute and assign the result in the model.
      *
      * @param  string  $attributeName
      */
-    public function setComputedAttributeValue(string $attributeName): void
-    {
-        $computed = $this->getComputedAttributeValue($attributeName);
-        $this->{$attributeName} = $computed;
-    }
+    public function setComputedAttributeValue(string $attributeName): void;
 
     /**
      * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
      *
-     * @param  Builder<static>  $builder
+     * @template TModel of Model
+     * @param  Builder<TModel>  $builder
      * @param  array<string>  $attributes  Attributes that will be generated.
-     * @return Builder<static>
+     * @return Builder<TModel>
      */
-    public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder
-    {
-        return $builder;
-    }
+    public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder;
 
     /**
      * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
      *
-     * @param  Builder<static>  $builder
+     * @template TModel of Model
+     * @param  Builder<TModel>  $builder
      * @param  array<string>  $attributes  Attributes that will be validated.
-     * @return Builder<static>
+     * @return Builder<TModel>
      */
-    public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder
-    {
-        return $builder;
-    }
+    public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder;
 
     /**
      * Return the configuration array for this model.
@@ -69,8 +56,5 @@ trait ComputedAttributes
      *
      * @return array<int, string>
      */
-    public function getComputedAttributeConfiguration(): array
-    {
-        return $this->computed ?? [];
-    }
+    public function getComputedAttributeConfiguration(): array;
 }

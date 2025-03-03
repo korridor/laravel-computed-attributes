@@ -7,7 +7,7 @@ namespace Korridor\LaravelComputedAttributes\Parser;
 use Composer\Autoload\ClassMapGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
-use Korridor\LaravelComputedAttributes\ComputedAttributes;
+use Korridor\LaravelComputedAttributes\ComputedAttributesInterface;
 use ReflectionClass;
 use ReflectionException;
 
@@ -18,7 +18,11 @@ class ModelAttributeParser
      */
     public function getAbsolutePathOfModelFolder(): string
     {
-        return base_path(Config::get('computed-attributes.model_path'));
+        $modelPath = Config::get('computed-attributes.model_path');
+        if (!is_string($modelPath)) {
+            throw new \LogicException('The config "computed-attributes.model_path" must be a string');
+        }
+        return base_path($modelPath);
     }
 
     /**
@@ -26,13 +30,17 @@ class ModelAttributeParser
      */
     public function getModelNamespaceBase(): string
     {
-        return Config::get('computed-attributes.model_namespace') . '\\';
+        $modelNamespace = Config::get('computed-attributes.model_namespace');
+        if (!is_string($modelNamespace)) {
+            throw new \LogicException('The config "computed-attributes.model_namespace" must be a string');
+        }
+        return $modelNamespace . '\\';
     }
 
     /**
      * Get all models classes that use the ComputedAttributes trait.
      *
-     * @return array
+     * @return list<class-string<Model&ComputedAttributesInterface>>
      *
      * @throws ReflectionException
      */
@@ -46,6 +54,7 @@ class ModelAttributeParser
             $traits = $reflection->getTraitNames();
             foreach ($traits as $trait) {
                 if ('Korridor\\LaravelComputedAttributes\\ComputedAttributes' === $trait) {
+                    /** @var class-string<Model&ComputedAttributesInterface> $class */
                     $models[] = $class;
                 }
             }
@@ -67,7 +76,7 @@ class ModelAttributeParser
         $models = $this->getAllModelClasses();
         if (null === $modelsWithAttributes) {
             foreach ($models as $model) {
-                /** @var Model|ComputedAttributes $modelInstance */
+                /** @var Model&ComputedAttributesInterface $modelInstance */
                 $modelInstance = new $model();
                 $attributes = $modelInstance->getComputedAttributeConfiguration();
                 $modelAttributesToProcess[] = new ModelAttributesEntry($model, $attributes);
@@ -81,7 +90,7 @@ class ModelAttributeParser
                 }
                 $model = $this->getModelNamespaceBase() . str_replace('/', '\\', $modelInAttributeExploded[0]);
                 if (in_array($model, $models)) {
-                    /** @var Model|ComputedAttributes $modelInstance */
+                    /** @var Model&ComputedAttributesInterface $modelInstance */
                     $modelInstance = new $model();
                 } else {
                     throw new ParsingException('Model "' . $model . '" not found ' .

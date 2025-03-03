@@ -32,7 +32,7 @@ class ModelAttributesEntry
     }
 
     /**
-     * @return class-string<Model|ComputedAttributes>
+     * @return class-string<Model>
      */
     public function getModel(): string
     {

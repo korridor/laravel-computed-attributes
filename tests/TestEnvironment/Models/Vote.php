@@ -27,7 +27,7 @@ class Vote extends Model
      */
 
     /**
-     * @return BelongsTo<Post, Vote>
+     * @return BelongsTo<Post, $this>
      */
     public function post(): BelongsTo
     {

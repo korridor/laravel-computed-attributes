@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
+use Korridor\LaravelComputedAttributes\ComputedAttributesInterface;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaved;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaving;
 
@@ -18,9 +19,9 @@ use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaving;
  * @property string $content
  * @property int $complex_calculation
  * @property int $sum_of_votes
- * @property-read Collection<Vote> $votes
+ * @property-read Collection<int, Vote> $votes
  */
-class Post extends Model
+class Post extends Model implements ComputedAttributesInterface
 {
     use ComputedAttributes;
 
@@ -70,7 +71,7 @@ class Post extends Model
      */
     public function getSumOfVotesComputed(): int
     {
-        return $this->votes->sum('rating');
+        return (int) $this->votes()->sum('rating');
     }
 
     /*
@@ -80,9 +81,9 @@ class Post extends Model
     /**
      * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
      *
-     * @param  Builder<self>  $builder
+     * @param  Builder<static>  $builder
      * @param  array<string>  $attributes  Attributes that will be generated.
-     * @return Builder<self>
+     * @return Builder<static>
      */
     public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder
     {
@@ -96,9 +97,9 @@ class Post extends Model
     /**
      * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
      *
-     * @param  Builder<self>  $builder
+     * @param  Builder<static>  $builder
      * @param  array<string>  $attributes  Attributes that will be validated.
-     * @return Builder<self>
+     * @return Builder<static>
      */
     public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder
     {
@@ -114,7 +115,7 @@ class Post extends Model
      */
 
     /**
-     * @return HasMany<Vote>
+     * @return HasMany<Vote, $this>
      */
     public function votes(): HasMany
     {
