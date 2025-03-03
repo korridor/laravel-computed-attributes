@@ -12,43 +12,89 @@ jobs:
               laravel: 10.*
               testbench: 8.*
               composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit-10.xml'
           -   php: 8.2
               laravel: 10.*
               testbench: 8.*
               composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit-10.xml'
           -   php: 8.3
               laravel: 10.*
               testbench: 8.*
               composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit-10.xml'
           -   php: 8.1
               laravel: 10.*
               testbench: 8.*
               composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit-10.xml'
           -   php: 8.2
               laravel: 10.*
               testbench: 8.*
               composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit-10.xml'
           -   php: 8.3
               laravel: 10.*
               testbench: 8.*
               composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit-10.xml'
           # Laravel 11.*
           -   php: 8.2
               laravel: 11.*
               testbench: 9.*
               composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
           -   php: 8.3
               laravel: 11.*
               testbench: 9.*
               composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
           -   php: 8.2
               laravel: 11.*
               testbench: 9.*
               composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit.xml'
           -   php: 8.2
               laravel: 11.*
               testbench: 9.*
               composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.4
+              laravel: 11.*
+              testbench: 9.*
+              composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
+          # Laravel 12
+          -   php: 8.2
+              laravel: 12.*
+              testbench: 10.*
+              composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.3
+              laravel: 12.*
+              testbench: 10.*
+              composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.4
+              laravel: 12.*
+              testbench: 10.*
+              composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.2
+              laravel: 12.*
+              testbench: 10.*
+              composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.3
+              laravel: 12.*
+              testbench: 10.*
+              composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.4
+              laravel: 12.*
+              testbench: 10.*
+              composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit.xml'
 
     runs-on: ubuntu-latest
 
@@ -69,7 +115,7 @@ jobs:
         run: composer update ${{ matrix.composer-flag }} --prefer-dist --no-interaction
 
       - name: Run PHPUnit
-        run: XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+        run: XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --config="${{ matrix.phpunit-config }}" --coverage-clover=coverage.xml
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4

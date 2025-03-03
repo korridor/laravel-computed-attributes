@@ -39,8 +39,9 @@ php artisan vendor:publish --tag=computed-attributes-config
 
 This package is tested for the following Laravel and PHP versions:
 
+ - 12.* (PHP 8.2, 8.3, 8.4)
+ - 11.* (PHP 8.2, 8.3, 8.4)
  - 10.* (PHP 8.1, 8.2, 8.3)
- - 11.* (PHP 8.2, 8.3)
  
 ## Usage examples
 
@@ -48,9 +49,10 @@ Here is an example of two computed attributes `complex_calculation` and `sum_of_
 The functions `getComplexCalculationComputed` and `getSumOfVotesComputed` are calculating the computed attributes.
 
 ```php
+use Illuminate\Database\Eloquent\Model;
 use Korridor\LaravelComputedAttributes\ComputedAttributes;
 
-class Post {
+class Post extends Model {
 
     use ComputedAttributes;
 

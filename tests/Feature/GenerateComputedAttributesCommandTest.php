@@ -6,6 +6,7 @@ namespace Korridor\LaravelComputedAttributes\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Testing\PendingCommand;
 use Korridor\LaravelComputedAttributes\Tests\TestCase;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaved;
 use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaving;
@@ -38,16 +39,17 @@ class GenerateComputedAttributesCommandTest extends TestCase
         Event::fake();
 
         // Act
-        $this->artisan('computed-attributes:generate', [
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:generate', [
             'modelsAttributes' => null,
-        ])
-            ->expectsOutput('Start calculating for following attributes of model ' .
-                '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Start calculating for following attributes of model ' .
+            '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation,sum_of_votes]')
             ->assertExitCode(0)
             ->execute();
-
-        // Assert
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'complex_calculation' => 3,
@@ -80,16 +82,17 @@ class GenerateComputedAttributesCommandTest extends TestCase
         ]);
 
         // Act
-        $this->artisan('computed-attributes:generate', [
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:generate', [
             'modelsAttributes' => 'Post:sum_of_votes',
-        ])
-            ->expectsOutput('Start calculating for following attributes of model ' .
-                '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Start calculating for following attributes of model ' .
+            '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[sum_of_votes]')
             ->assertExitCode(0)
             ->execute();
-
-        // Assert
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'complex_calculation' => null,
@@ -99,30 +102,43 @@ class GenerateComputedAttributesCommandTest extends TestCase
 
     public function testNonNumericChunkSizeIsReturnsErrorMessage(): void
     {
-        $this->artisan('computed-attributes:generate', [
+
+        // Act
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:generate', [
             '--chunkSize' => 'text',
-        ])
-            ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Option chunkSize needs to be an integer greater than zero')
             ->assertExitCode(1)
             ->execute();
     }
 
     public function testNegativeChunkSizeReturnsErrorMessage(): void
     {
-        $this->artisan('computed-attributes:generate', [
+        // Act
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:generate', [
             '--chunkSize' => '-10',
-        ])
-            ->expectsOutput('Option chunkSize needs to be an integer greater than zero')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Option chunkSize needs to be an integer greater than zero')
             ->assertExitCode(1)
             ->execute();
     }
 
     public function testZeroAsChunkSizeReturnsErrorMessage(): void
     {
-        $this->artisan('computed-attributes:generate', [
+        // Act
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:generate', [
             '--chunkSize' => '0',
-        ])
-            ->expectsOutput('Option chunkSize needs to be greater than zero')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Option chunkSize needs to be greater than zero')
             ->assertExitCode(1)
             ->execute();
     }
@@ -148,16 +164,17 @@ class GenerateComputedAttributesCommandTest extends TestCase
         Event::fake();
 
         // Act
-        $this->artisan('computed-attributes:generate', [
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:generate', [
             'modelsAttributes' => 'Post:complex_calculation',
-        ])
-            ->expectsOutput('Start calculating for following attributes of model ' .
-                '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
+        ]);
+
+        // Assert
+        $command->expectsOutput('Start calculating for following attributes of model ' .
+            '"Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Models\Post":')
             ->expectsOutput('[complex_calculation]')
             ->assertExitCode(0)
             ->execute();
-
-        // Assert
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
             'complex_calculation' => 3,
@@ -193,15 +210,16 @@ class GenerateComputedAttributesCommandTest extends TestCase
         ]);
 
         // Act
-        $this->artisan('computed-attributes:generate', [
+        /** @var PendingCommand $command */
+        $command = $this->artisan('computed-attributes:generate', [
             '--chunkSize' => '1',
             '--chunk' => '0',
             'modelsAttributes' => 'Post:complex_calculation',
-        ])
-            ->assertExitCode(0)
-            ->execute();
+        ]);
 
         // Assert
+        $command->assertExitCode(0)
+            ->execute();
         $this->assertDatabaseHas('posts', [
             'id' => $post1->id,
             'complex_calculation' => 3,
