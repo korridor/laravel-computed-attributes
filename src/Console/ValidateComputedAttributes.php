@@ -166,6 +166,6 @@ class ValidateComputedAttributes extends Command
             return 'null';
         }
 
-        return gettype($var) . '(' . $var . ')';
+        return gettype($var) . '(' . ($var->value ?? $var) . ')';
     }
 }
