@@ -199,7 +199,7 @@ The `composer test-coverage` command runs all tests with phpunit and creates a c
 ### Codeformatting/Linting
 
 The `composer fix` command formats the code with [php-cs-fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer).
-The `composer lint` command checks the code with [phpcs](https://github.com/squizlabs/PHP_CodeSniffer).
+The `composer lint` command checks the code with [phpcs](https://github.com/PHPCSStandards/PHP_CodeSniffer).
 
 ## License
 
