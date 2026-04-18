@@ -5,6 +5,7 @@ on: [ push ]
 jobs:
   PHPUnit:
     strategy:
+      fail-fast: false
       matrix:
         include:
           # Laravel 10.*
@@ -39,25 +40,10 @@ jobs:
               composer-flag: '--prefer-lowest'
               phpunit-config: 'phpunit-10.xml'
           # Laravel 11.*
-          -   php: 8.2
-              laravel: 11.*
-              testbench: 9.*
-              composer-flag: '--prefer-stable'
-              phpunit-config: 'phpunit.xml'
           -   php: 8.3
               laravel: 11.*
               testbench: 9.*
               composer-flag: '--prefer-stable'
-              phpunit-config: 'phpunit.xml'
-          -   php: 8.2
-              laravel: 11.*
-              testbench: 9.*
-              composer-flag: '--prefer-lowest'
-              phpunit-config: 'phpunit.xml'
-          -   php: 8.2
-              laravel: 11.*
-              testbench: 9.*
-              composer-flag: '--prefer-lowest'
               phpunit-config: 'phpunit.xml'
           -   php: 8.4
               laravel: 11.*
@@ -95,7 +81,27 @@ jobs:
               testbench: 10.*
               composer-flag: '--prefer-lowest'
               phpunit-config: 'phpunit.xml'
-
+          # Laravel 13
+          -   php: 8.3
+              laravel: 13.*
+              testbench: 11.*
+              composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.4
+              laravel: 13.*
+              testbench: 11.*
+              composer-flag: '--prefer-stable'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.3
+              laravel: 13.*
+              testbench: 11.*
+              composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit.xml'
+          -   php: 8.4
+              laravel: 13.*
+              testbench: 11.*
+              composer-flag: '--prefer-lowest'
+              phpunit-config: 'phpunit.xml'
     runs-on: ubuntu-latest
 
     steps:
