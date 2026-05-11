@@ -40,7 +40,7 @@ class ModelAttributeParser
     /**
      * Get all models classes that use the ComputedAttributes trait.
      *
-     * @return list<class-string<Model&ComputedAttributesInterface>>
+     * @return list<class-string<Model&ComputedAttributesInterface<Model>>>
      *
      * @throws ReflectionException
      */
@@ -54,7 +54,7 @@ class ModelAttributeParser
             $traits = $reflection->getTraitNames();
             foreach ($traits as $trait) {
                 if ('Korridor\\LaravelComputedAttributes\\ComputedAttributes' === $trait) {
-                    /** @var class-string<Model&ComputedAttributesInterface> $class */
+                    /** @var class-string<Model&ComputedAttributesInterface<Model>> $class */
                     $models[] = $class;
                 }
             }
@@ -76,7 +76,7 @@ class ModelAttributeParser
         $models = $this->getAllModelClasses();
         if (null === $modelsWithAttributes) {
             foreach ($models as $model) {
-                /** @var Model&ComputedAttributesInterface $modelInstance */
+                /** @var Model&ComputedAttributesInterface<Model> $modelInstance */
                 $modelInstance = new $model();
                 $attributes = $modelInstance->getComputedAttributeConfiguration();
                 $modelAttributesToProcess[] = new ModelAttributesEntry($model, $attributes);
@@ -90,7 +90,8 @@ class ModelAttributeParser
                 }
                 $model = $this->getModelNamespaceBase() . str_replace('/', '\\', $modelInAttributeExploded[0]);
                 if (in_array($model, $models)) {
-                    /** @var Model&ComputedAttributesInterface $modelInstance */
+                    /** @var class-string<Model&ComputedAttributesInterface<Model>> $model */
+                    /** @var Model&ComputedAttributesInterface<Model> $modelInstance */
                     $modelInstance = new $model();
                 } else {
                     throw new ParsingException('Model "' . $model . '" not found ' .

@@ -6,11 +6,12 @@ namespace Korridor\LaravelComputedAttributes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 /**
- * @method Builder<static> computedAttributesValidate(array<string> $attributes)
- * @method Builder<static> computedAttributesGenerate(array<string> $attributes)
+ * @template TModel of Model
+ *
+ * @method Builder<TModel> computedAttributesValidate(array<string> $attributes)
+ * @method Builder<TModel> computedAttributesGenerate(array<string> $attributes)
  * @phpstan-require-extends Model
  */
 interface ComputedAttributesInterface
@@ -33,7 +34,6 @@ interface ComputedAttributesInterface
     /**
      * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
      *
-     * @template TModel of Model
      * @param  Builder<TModel>  $builder
      * @param  array<string>  $attributes  Attributes that will be generated.
      * @return Builder<TModel>
@@ -43,7 +43,6 @@ interface ComputedAttributesInterface
     /**
      * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
      *
-     * @template TModel of Model
      * @param  Builder<TModel>  $builder
      * @param  array<string>  $attributes  Attributes that will be validated.
      * @return Builder<TModel>

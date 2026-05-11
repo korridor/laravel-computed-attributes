@@ -20,6 +20,7 @@ use Korridor\LaravelComputedAttributes\Tests\TestEnvironment\Events\PostSaving;
  * @property int $complex_calculation
  * @property int $sum_of_votes
  * @property-read Collection<int, Vote> $votes
+ * @implements ComputedAttributesInterface<Post>
  */
 class Post extends Model implements ComputedAttributesInterface
 {
@@ -81,9 +82,9 @@ class Post extends Model implements ComputedAttributesInterface
     /**
      * This scope will be applied during the computed property generation with artisan computed-attributes:generate.
      *
-     * @param  Builder<static>  $builder
+     * @param  Builder<Post>  $builder
      * @param  array<string>  $attributes  Attributes that will be generated.
-     * @return Builder<static>
+     * @return Builder<Post>
      */
     public function scopeComputedAttributesGenerate(Builder $builder, array $attributes): Builder
     {
@@ -97,9 +98,9 @@ class Post extends Model implements ComputedAttributesInterface
     /**
      * This scope will be applied during the computed property validation with artisan computed-attributes:validate.
      *
-     * @param  Builder<static>  $builder
+     * @param  Builder<Post>  $builder
      * @param  array<string>  $attributes  Attributes that will be validated.
-     * @return Builder<static>
+     * @return Builder<Post>
      */
     public function scopeComputedAttributesValidate(Builder $builder, array $attributes): Builder
     {

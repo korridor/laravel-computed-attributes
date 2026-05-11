@@ -9,3 +9,8 @@ parameters:
 
     # Level 9 is the highest level
     level: 9
+    ignoreErrors:
+        -
+            identifier: nullCoalesce.property
+            path: src/ComputedAttributes.php
+            reportUnmatched: false

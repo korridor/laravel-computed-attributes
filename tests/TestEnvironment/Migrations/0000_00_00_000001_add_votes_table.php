@@ -21,8 +21,8 @@ return new class () extends Migration {
             $table->foreign('post_id')
                 ->on('posts')
                 ->references('id')
-                ->onUpdate('CASCADE')
-                ->onDelete('RESTRICT');
+                ->onUpdate('cascade')
+                ->onDelete('restrict');
             $table->softDeletes();
             $table->timestamps();
         });

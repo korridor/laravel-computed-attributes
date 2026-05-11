@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Korridor\LaravelComputedAttributes\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Korridor\LaravelComputedAttributes\ComputedAttributesInterface;
 use Korridor\LaravelComputedAttributes\Parser\ModelAttributeParser;
@@ -106,7 +104,7 @@ class GenerateComputedAttributes extends Command
         // Calculate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
             $model = $modelAttributesEntry->getModel();
-            /** @var Model&ComputedAttributesInterface $modelInstance */
+            /** @var Model&ComputedAttributesInterface<Model> $modelInstance */
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
 
@@ -116,12 +114,13 @@ class GenerateComputedAttributes extends Command
                 $query = $modelInstance->computedAttributesGenerate($attributes);
 
                 if ($chunk !== null) {
+                    /** @var EloquentCollection<int, Model> $modelResults */
                     $modelResults = $query->offset($chunk * $chunkSize)
                         ->limit($chunkSize)
                         ->get();
                     $this->generateModels($modelResults, $attributes, $modelAttributesEntry);
                 } else {
-                    $query->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry): void {
+                    $query->chunk($chunkSize, function (EloquentCollection $modelResults) use ($attributes, $modelAttributesEntry): void {
                         $this->generateModels($modelResults, $attributes, $modelAttributesEntry);
                     });
                 }
@@ -132,7 +131,7 @@ class GenerateComputedAttributes extends Command
     }
 
     /**
-     * @param EloquentCollection<array-key, Model&ComputedAttributesInterface> $models
+     * @param EloquentCollection<int, Model> $models
      * @param array<string> $attributes
      * @param ModelAttributesEntry $modelAttributesEntry
      * @return void
@@ -140,11 +139,18 @@ class GenerateComputedAttributes extends Command
     private function generateModels(EloquentCollection $models, array $attributes, ModelAttributesEntry $modelAttributesEntry): void
     {
         foreach ($models as $modelResult) {
-            foreach ($attributes as $attribute) {
-                $modelResult->setComputedAttributeValue($attribute);
+            if (! $modelResult instanceof ComputedAttributesInterface) {
+                throw new \LogicException('Model must implement ComputedAttributesInterface');
             }
-            if ($modelResult->isDirty()) {
-                $modelResult->save();
+
+            /** @var Model&ComputedAttributesInterface<Model> $computedAttributeModel */
+            $computedAttributeModel = $modelResult;
+
+            foreach ($attributes as $attribute) {
+                $computedAttributeModel->setComputedAttributeValue($attribute);
+            }
+            if ($computedAttributeModel->isDirty()) {
+                $computedAttributeModel->save();
             }
         }
     }
