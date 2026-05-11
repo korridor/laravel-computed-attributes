@@ -6,7 +6,6 @@ namespace Korridor\LaravelComputedAttributes\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Korridor\LaravelComputedAttributes\ComputedAttributesInterface;
 use Korridor\LaravelComputedAttributes\Parser\ModelAttributeParser;
@@ -110,7 +109,7 @@ class ValidateComputedAttributes extends Command
         // Validate
         foreach ($modelAttributesEntries as $modelAttributesEntry) {
             $model = $modelAttributesEntry->getModel();
-            /** @var Model&ComputedAttributesInterface $modelInstance */
+            /** @var Model&ComputedAttributesInterface<Model> $modelInstance */
             $modelInstance = new $model();
             $attributes = $modelAttributesEntry->getAttributes();
 
@@ -120,12 +119,13 @@ class ValidateComputedAttributes extends Command
                 $query = $modelInstance->computedAttributesValidate($attributes);
 
                 if ($chunk !== null) {
+                    /** @var EloquentCollection<int, Model> $modelResults */
                     $modelResults = $query->offset($chunk * $chunkSize)
                         ->limit($chunkSize)
                         ->get();
                     $this->validateModels($modelResults, $attributes, $modelAttributesEntry);
                 } else {
-                    $query->chunk($chunkSize, function ($modelResults) use ($attributes, $modelAttributesEntry): void {
+                    $query->chunk($chunkSize, function (EloquentCollection $modelResults) use ($attributes, $modelAttributesEntry): void {
                         $this->validateModels($modelResults, $attributes, $modelAttributesEntry);
                     });
                 }
@@ -136,7 +136,7 @@ class ValidateComputedAttributes extends Command
     }
 
     /**
-     * @param EloquentCollection<array-key, Model&ComputedAttributesInterface> $models
+     * @param EloquentCollection<int, Model> $models
      * @param array<string> $attributes
      * @param ModelAttributesEntry $modelAttributesEntry
      * @return void
@@ -144,13 +144,24 @@ class ValidateComputedAttributes extends Command
     private function validateModels(EloquentCollection $models, array $attributes, ModelAttributesEntry $modelAttributesEntry): void
     {
         foreach ($models as $modelResult) {
+            if (! $modelResult instanceof ComputedAttributesInterface) {
+                throw new \LogicException('Model must implement ComputedAttributesInterface');
+            }
+
+            /** @var Model&ComputedAttributesInterface<Model> $computedAttributeModel */
+            $computedAttributeModel = $modelResult;
+
             foreach ($attributes as $attribute) {
-                if ($modelResult->getComputedAttributeValue($attribute) !== $modelResult->{$attribute}) {
+                $currentValue = $computedAttributeModel->{$attribute};
+                $calculatedValue = $computedAttributeModel->getComputedAttributeValue($attribute);
+                /** @var string|int $key */
+                $key = $computedAttributeModel->getKey();
+
+                if ($calculatedValue !== $currentValue) {
                     $this->info($modelAttributesEntry->getModel() .
-                        '[' . $modelResult->getKeyName() . '=' . $modelResult->getKey() . '][' . $attribute . ']');
-                    $this->info('Current value: ' . $this->varToString($modelResult->{$attribute}));
-                    $this->info('Calculated value: ' .
-                        $this->varToString($modelResult->getComputedAttributeValue($attribute)));
+                        '[' . $computedAttributeModel->getKeyName() . '=' . $key . '][' . $attribute . ']');
+                    $this->info('Current value: ' . $this->varToString($currentValue));
+                    $this->info('Calculated value: ' . $this->varToString($calculatedValue));
                 }
             }
         }
@@ -166,12 +177,28 @@ class ValidateComputedAttributes extends Command
             return 'null';
         }
         if ($var instanceof \BackedEnum) {
-            return $var->value;
+            return (string) $var->value;
         }
         if ($var instanceof \UnitEnum) {
             return $var->name;
         }
+        if (is_bool($var)) {
+            return 'boolean(' . ($var ? 'true' : 'false') . ')';
+        }
+        if (is_int($var)) {
+            return 'integer(' . $var . ')';
+        }
+        if (is_float($var)) {
+            return 'double(' . $var . ')';
+        }
+        if (is_string($var)) {
+            return 'string(' . $var . ')';
+        }
+        // Check if object and has to string method
+        if (is_object($var) && method_exists($var, '__toString')) {
+            return 'object(' . $var->__toString() . ')';
+        }
 
-        return gettype($var) . '(' . $var . ')';
+        return gettype($var);
     }
 }
