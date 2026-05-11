@@ -165,6 +165,12 @@ class ValidateComputedAttributes extends Command
         if ($var === null) {
             return 'null';
         }
+        if ($var instanceof \BackedEnum) {
+            return $var->value;
+        }
+        if ($var instanceof \UnitEnum) {
+            return $var->name;
+        }
 
         return gettype($var) . '(' . $var . ')';
     }
