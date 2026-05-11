@@ -39,6 +39,7 @@ php artisan vendor:publish --tag=computed-attributes-config
 
 This package is tested for the following Laravel and PHP versions:
 
+ - 13.* (PHP 8.3, 8.4)
  - 12.* (PHP 8.2, 8.3, 8.4)
  - 11.* (PHP 8.2, 8.3, 8.4)
  - 10.* (PHP 8.1, 8.2, 8.3)
